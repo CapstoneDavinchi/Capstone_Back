@@ -1,0 +1,15 @@
+steps:
+  - name: 'gradle'
+    args:
+      - ./gradlew
+      - clean
+      - build
+
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '-t', 'asia-northeast1-docker.pkg.dev/${PROJECT_ID}/davinchi-cicd-ar/davinchi-image:lateset', '.']
+
+  - name: 'gcr.io/cloud-builders/docker'
+    args: [ 'push', 'asia-northeast1-docker.pkg.dev/${PROJECT_ID}/davinchi-cicd-ar/davinchi-image:latest' ]
+
+options:
+  logging: CLOUD_LOGGING_ONLY
