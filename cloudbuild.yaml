@@ -1,0 +1,13 @@
+steps:
+  - name: 'gradle'
+    args:
+      - ./gradlew
+      - clean
+      - build
+  # 1. 도커 이미지 빌드
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '-t', 'asia-northeast1-docker.pkg.dev/${PROJECT_ID}/davinchi-cicd-ar/davinchi-image:latest', '.']
+
+  # 2. Artifact Registry
+  - name: 'gcr.io/cloud-builders/docker'
+    args: [ 'push', 'asia-northeast1-docker.pkg.dev/${PROJECT_ID}/davinchi-cicd-ar/davinchi-image:latest' ]
