@@ -11,3 +11,6 @@ steps:
   # 2. Artifact Registry
   - name: 'gcr.io/cloud-builders/docker'
     args: [ 'push', 'asia-northeast1-docker.pkg.dev/${PROJECT_ID}/davinchi-cicd-ar/davinchi-image:latest' ]
+
+options:
+  logging: CLOUD_LOGGING_ONLY
