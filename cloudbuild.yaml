@@ -12,5 +12,17 @@ steps:
   - name: 'gcr.io/cloud-builders/docker'
     args: [ 'push', 'asia-northeast1-docker.pkg.dev/${PROJECT_ID}/davinchi-cicd-ar/davinchi-image:latest' ]
 
+  # 3. Cloud Run
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: gcloud
+    args:
+      - 'run'
+      - 'deploy'
+      - 'davinchi-cr'
+      - '--image'
+      - 'asia-northeast1-docker.pkg.dev/${PROJECT_ID}/davinchi-cicd-ar/davinchi-image:latest'
+      - '--region'
+      - 'asia-northeast1'
+
 options:
   logging: CLOUD_LOGGING_ONLY
