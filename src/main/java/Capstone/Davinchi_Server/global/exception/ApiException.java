@@ -8,5 +8,5 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 public class ApiException extends RuntimeException {
-    private ApiResponseStatus status; // ApiResponseStatus 객체에 매핑
+    private ApiResponseStatus status; // ApiResponseStatus 객체 매핑
 }

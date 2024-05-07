@@ -13,7 +13,6 @@ public class UserReq {
         private String email;
         private String password;
         private String nickname;
-        // private String phone;
     }
 
     @Builder

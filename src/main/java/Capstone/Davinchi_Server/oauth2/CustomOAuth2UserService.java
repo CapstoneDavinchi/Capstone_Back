@@ -15,7 +15,6 @@ import java.util.Collections;
 
 @Service
 public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequest, OAuth2User> {
-
     private final UserRepository userRepository;
 
     public CustomOAuth2UserService(UserRepository userRepository) {

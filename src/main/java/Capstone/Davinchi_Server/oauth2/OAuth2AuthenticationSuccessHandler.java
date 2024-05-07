@@ -22,6 +22,7 @@ import static org.springframework.web.util.UriComponentsBuilder.fromUriString;
 @Component
 @RequiredArgsConstructor
 public class OAuth2AuthenticationSuccessHandler implements AuthenticationSuccessHandler {
+
     private final JwtTokenUtil jwtTokenUtil;
     private final RefreshTokenRepository refreshTokenRepository;
     private final HttpCookieOAuth2AuthorizationRequestRepository httpCookieOAuth2AuthorizationRequestRepository;

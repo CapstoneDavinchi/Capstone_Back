@@ -3,6 +3,7 @@ package Capstone.Davinchi_Server.user.dto;
 import lombok.*;
 
 public class UserRes {
+
     @Builder
     @NoArgsConstructor
     @AllArgsConstructor

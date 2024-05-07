@@ -12,6 +12,7 @@ import static Capstone.Davinchi_Server.global.exception.ApiResponseStatus.SUCCES
 @AllArgsConstructor
 @JsonPropertyOrder({"isSuccess", "code", "message", "result"})
 public class ApiResponse<T> { //ApiResponse 객체를 사용할때 성공, 실패 경우
+
     @JsonProperty("isSuccess")
     private final Boolean isSuccess;
     private final String message;

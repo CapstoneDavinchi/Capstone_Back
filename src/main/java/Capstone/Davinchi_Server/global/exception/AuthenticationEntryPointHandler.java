@@ -56,7 +56,7 @@ public class AuthenticationEntryPointHandler implements AuthenticationEntryPoint
         if(exception.equals("UsernameOrPasswordNotFoundException")) {
             errorCode = ApiResponseStatus.USERNAME_OR_PASSWORD_NOT_FOUND_EXCEPTION;
             setResponse(response, errorCode);
-            return;
+            return ;
         }
 
     }
