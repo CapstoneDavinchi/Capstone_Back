@@ -11,12 +11,11 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class SwaggerConfig {
-
     @Bean
     public OpenAPI UMCstudyAPI() {
         Info info = new Info()
-                .title("Davinci Server API")
-                .description("Capstone Davinci팀 API 명세서")
+                .title("Davinchi Server API")
+                .description("Capstone Davinchi팀 API 명세서")
                 .version("1.0.0");
 
         String jwtSchemeName = "JWT TOKEN";

@@ -21,6 +21,7 @@ import org.springframework.web.servlet.handler.HandlerMappingIntrospector;
 @AllArgsConstructor
 @EnableWebSecurity
 public class WebSecurityConfig {
+
     private final JwtTokenUtil jwtTokenUtil;
     private final AuthenticationEntryPointHandler authenticationEntryPointHandler;
     private final CustomOAuth2UserService customOAuth2UserService;

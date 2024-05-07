@@ -19,7 +19,6 @@ import java.util.Collection;
 @AllArgsConstructor
 @Table(name = "user")
 public class User implements UserDetails {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="user_id", unique = true, nullable = false)
