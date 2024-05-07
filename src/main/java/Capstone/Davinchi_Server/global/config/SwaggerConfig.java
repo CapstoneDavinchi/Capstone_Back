@@ -1,4 +1,4 @@
-package Capstone.Davinchi_Server.config;
+package Capstone.Davinchi_Server.global.config;
 
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
