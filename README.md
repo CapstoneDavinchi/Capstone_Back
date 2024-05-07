@@ -71,7 +71,7 @@ footer
 SMS, 이메일 중복확인 API 개발
 
 Fixes: #15
-Resolves: #123
+Resolves: #15
 Ref: #456
 Related to: #48, #45
 
