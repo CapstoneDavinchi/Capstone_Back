@@ -40,7 +40,15 @@ public class ChatRoomController {
         }
     }
 
-
+    // 원래 있던 채팅방 재입장시 화면에 나와야 할 정보를 반환
+    @GetMapping("/room/enter/{roomId}")
+    public ApiResponse<List<ChatRoomRes.GetChatRoomDetailRes>> getChatRoomDetails(@PathVariable String roomId) {
+        try {
+            return new ApiResponse<>(chatRoomService.getChatRoomDetails(roomId));
+        } catch (ApiException exception) {
+            return new ApiResponse<>(exception.getStatus());
+        }
+    }
 
 }
 

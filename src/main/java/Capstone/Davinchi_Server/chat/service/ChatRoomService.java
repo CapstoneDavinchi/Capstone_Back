@@ -100,6 +100,38 @@ public class ChatRoomService {
         return getChatRoomRes;
     }
 
+
+    public List<ChatRoomRes.GetChatRoomDetailRes> getChatRoomDetails(String roomId) {
+        List<ChatRoomRes.GetChatRoomDetailRes> chatRoomDetailResList = new ArrayList<>(); // 유저에게 보여질 채팅방 정보
+        List<TextMessage> textMessages = textMessageRepository.findMessagesByRoomId(roomId); // 채팅방에 있는 메시지 리스트 저장
+
+        List<String> messageList = new ArrayList<>(); // 같은 유저의 연속된 메시지를 저장하는 리스트
+        for (int i = 0; i < textMessages.size(); i++) { // 채팅 기록을 역순(최근 순)으로 조회
+            TextMessage msg = textMessages.get(i);
+            msg.setRead(true);
+            User sender = msg.getSender();
+            messageList.add(msg.getMessage()); // 리스트에 메시지를 add
+            if (i < textMessages.size() - 1) { // ArrayIndexOutOfBoundsException에 대한 Handling
+                TextMessage prevMsg = textMessages.get(i + 1); // 바로 이전 메시지
+                User prevSender = prevMsg.getSender(); // 바로 이전 메시지의 발신자
+                // 이전에 메시지를 보낸 유저와 이번 메시지를 보낸 유저가 같으면
+                if (sender.getUserId().equals(prevSender.getUserId())) {
+                    continue;
+                }
+            }
+            String profileUrl=sender.getProfileImage();
+
+            ChatRoomRes.GetChatRoomDetailRes chatRoomDetailRes = new ChatRoomRes.GetChatRoomDetailRes(
+                    sender.getUserId(), sender.getNickname(), profileUrl,
+                    new ArrayList<>(messageList), msg.getSendDate(), msg.getSendTime());
+
+            chatRoomDetailResList.add(chatRoomDetailRes);
+            messageList.clear();
+        }
+        return chatRoomDetailResList;
+    }
+
+
     public static String formatTime(LocalTime time) {
         int hour = time.getHour();
         int min = time.getMinute();
