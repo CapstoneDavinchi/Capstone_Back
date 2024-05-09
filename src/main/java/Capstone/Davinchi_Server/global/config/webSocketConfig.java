@@ -1,4 +1,4 @@
-package Capstone.Davinchi_Server.config;
+package Capstone.Davinchi_Server.global.config;
 
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
 import org.springframework.web.socket.config.annotation.StompEndpointRegistry;

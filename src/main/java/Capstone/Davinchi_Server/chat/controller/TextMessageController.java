@@ -1,8 +1,5 @@
 package Capstone.Davinchi_Server.chat.controller;
 
-import Capstone.Davinchi_Server.chat.dto.text_message.AddUserReq;
-import Capstone.Davinchi_Server.chat.dto.text_message.PostMessageReq;
-import Capstone.Davinchi_Server.chat.dto.text_message.SendMessageReq;
 import Capstone.Davinchi_Server.chat.entity.TextMessage;
 import Capstone.Davinchi_Server.chat.service.ChatRoomService;
 import Capstone.Davinchi_Server.chat.dto.text_message.TextMessageDto;
