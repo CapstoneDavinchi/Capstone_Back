@@ -29,6 +29,18 @@ public class ChatRoomController {
         }
     }
 
+    // 내가 속한 채팅방 리스트(+상대 프로필) 조회
+    @GetMapping("/room")
+    public ApiResponse<List<ChatRoomRes.GetChatRoomRes>> getChatRoomList(Principal principal) {
+        try {
+            return new ApiResponse<>(chatRoomService.getChatRoomListById(principal.getName()));
+
+        } catch (ApiException exception) {
+            return new ApiResponse<>(exception.getStatus());
+        }
+    }
+
+
 
 }
 
