@@ -50,5 +50,19 @@ public class ChatRoomController {
         }
     }
 
+
+    // 채팅방 나가기/삭제, 이 api 호출시 db에서 해당 room 완전 삭제(거래 1:1진행 전제)
+    @DeleteMapping("/room/{roomId}")
+    public ApiResponse<String> exitChatRoom(@PathVariable String roomId, Principal principal){
+        try {
+            return new ApiResponse<>(chatRoomService.exitChatRoom(roomId, principal.getName()));
+        } catch (ApiException exception) {
+            return new ApiResponse<>(exception.getStatus());
+        }
+    }
+
+
+
+
 }
 

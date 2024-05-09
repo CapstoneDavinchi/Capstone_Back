@@ -132,6 +132,25 @@ public class ChatRoomService {
     }
 
 
+    // 채팅방 나가기
+    public String exitChatRoom(String roomId, String email) {
+        ChatRoom chatroom = chatRoomRepository.findChatRoomById(roomId).orElseThrow(() -> {
+            throw new ApiException(ApiResponseStatus.NONE_EXIST_USER);
+        });
+        User user = userRepository.findByEmail(email).orElseThrow(() -> {
+            throw new ApiException(ApiResponseStatus.NONE_EXIST_USER);
+        });
+
+        userChatRoomRepository.deleteUserChatRoomByUserIdWithRoomId(user.getUserId(), roomId);
+        userChatRoomRepository.deleteUserChatRoomsByRoomId(roomId);
+        textMessageRepository.deleteMessageByRoomId(roomId);
+        chatRoomRepository.deleteChatRoomById(roomId);
+
+        String result = user.getNickname() + "님이 " + roomId + "번 채팅방을 나갔습니다.";
+        return result;
+    }
+
+
     public static String formatTime(LocalTime time) {
         int hour = time.getHour();
         int min = time.getMinute();
