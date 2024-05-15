@@ -45,6 +45,7 @@ public class WebSecurityConfig {
                         .requestMatchers("/jwt/**", "/oauth2/**", "/login/**").permitAll()
                         .requestMatchers( "/","/swagger-ui/**", "/v3/api-docs/**").permitAll()
                         .requestMatchers( "/actuator/**").permitAll()
+                        .requestMatchers("/chat").permitAll()
                         .anyRequest().authenticated()
                 )
                 .exceptionHandling((exceptionConfig) ->
