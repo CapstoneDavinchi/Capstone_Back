@@ -5,6 +5,7 @@ import Capstone.Davinchi_Server.global.jwt.JwtAuthenticationFilter;
 import Capstone.Davinchi_Server.global.jwt.JwtTokenUtil;
 import Capstone.Davinchi_Server.oauth2.CustomOAuth2UserService;
 import Capstone.Davinchi_Server.oauth2.HttpCookieOAuth2AuthorizationRequestRepository;
+import Capstone.Davinchi_Server.oauth2.OAuth2AuthenticationFailureHandler;
 import Capstone.Davinchi_Server.oauth2.OAuth2AuthenticationSuccessHandler;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -26,6 +27,7 @@ public class WebSecurityConfig {
     private final AuthenticationEntryPointHandler authenticationEntryPointHandler;
     private final CustomOAuth2UserService customOAuth2UserService;
     private final OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler;
+    private final OAuth2AuthenticationFailureHandler oAuth2AuthenticationFailureHandler;
 
     @Bean
     public HttpCookieOAuth2AuthorizationRequestRepository cookieOAuth2AuthorizationRequestRepository() {
@@ -50,28 +52,29 @@ public class WebSecurityConfig {
                 .exceptionHandling((exceptionConfig) ->
                         exceptionConfig.authenticationEntryPoint(authenticationEntryPointHandler))
                 // JwtAuthenticationFilter를 UsernamePasswordAuthenticationFilter 전에 넣는다
-                .addFilterBefore(new JwtAuthenticationFilter(jwtTokenUtil), UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(new JwtAuthenticationFilter(jwtTokenUtil), UsernamePasswordAuthenticationFilter.class)
 
                 //oauth2
-//                .oauth2Login(oauth2Login -> oauth2Login
-//                        .authorizationEndpoint(authorizationEndpoint ->
-//                                authorizationEndpoint
-//                                        //권한 부여 엔드포인트
-//                                        //           .baseUri("/oauth2/authorize")
-//                                        //권한 요청 저장
-//                                        .authorizationRequestRepository(cookieOAuth2AuthorizationRequestRepository())
-//                        )
-//                        .redirectionEndpoint(redirectionEndpoint ->
-//                                redirectionEndpoint
-//                                        //
-//                                        .baseUri("/login/oauth2/code/**")
-//                        )
-//                        .userInfoEndpoint(userInfoEndpoint ->
-//                                userInfoEndpoint
-//                                        .userService(customOAuth2UserService)
-//                        )
-//                        .successHandler(oAuth2AuthenticationSuccessHandler)
-//                );
+                .oauth2Login(oauth2Login -> oauth2Login
+                        .authorizationEndpoint(authorizationEndpoint ->
+                                authorizationEndpoint
+                                        //권한 부여 엔드포인트
+                                        .baseUri("/oauth2/authorize")
+                                        //권한 요청 저장
+                                        .authorizationRequestRepository(cookieOAuth2AuthorizationRequestRepository())
+                        )
+                        .redirectionEndpoint(redirectionEndpoint ->
+                                redirectionEndpoint
+                                        //
+                                        .baseUri("/login/oauth2/code/**")
+                        )
+                        .userInfoEndpoint(userInfoEndpoint ->
+                                userInfoEndpoint
+                                        .userService(customOAuth2UserService)
+                        )
+                        .successHandler(oAuth2AuthenticationSuccessHandler)
+//                        .failureHandler(oAuth2AuthenticationFailureHandler)
+                );
 
         return http.build();
     }
