@@ -14,5 +14,12 @@ spring:
       hibernate:
         format_sql: true
 
+  profiles:
+    include: oauth
+
+logging:
+  level:
+    org.springframework.security: DEBUG
+
 jwt:
   secret-key: ${JWT_SECRET_KEY}
