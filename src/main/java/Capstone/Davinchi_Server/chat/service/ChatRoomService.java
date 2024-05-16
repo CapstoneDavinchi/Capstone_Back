@@ -22,6 +22,7 @@ import java.util.stream.Collectors;
 
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class ChatRoomService {
     private final ChatRoomRepository chatRoomRepository;
@@ -56,8 +57,10 @@ public class ChatRoomService {
         chatRoomRepository.save(chatRoom);
         userChatRoomRepository.save(userChatRoom1);
         userChatRoomRepository.save(userChatRoom2);
-        return chatRoom.getChatRoomId();
+        String result = chatRoom.getChatRoomId() + "번 채팅방을 생성하였습니다.";
+        return result;
     }
+
 
     public List<ChatRoomRes.GetChatRoomRes> getChatRoomListById(String email) {
 
@@ -70,26 +73,23 @@ public class ChatRoomService {
         List<ChatRoomRes.GetChatRoomRes> getChatRoomRes = userChatRooms.stream()
                 .map(userChatRoom -> {
                     // 나를 제외한 이 채팅룸에 있는 상대의 정보, 즉 채팅하는 대상 정보
-                    UserChatRoom chatRoom = userChatRoomRepository.findByUserChatRoomIdAndOtherUserId(user.getUserId(), userChatRoom.getUserChatRoomId()).orElseThrow(() -> {
-                        throw new ApiException(ApiResponseStatus.NONE_EXIST_USER);
+                    UserChatRoom chatRoom = userChatRoomRepository.findByUserChatRoomIdAndOtherUserId(user.getUserId(), userChatRoom.getChatRoom().getChatRoomId()).orElseThrow(() -> {
+                        throw new ApiException(ApiResponseStatus.NONE_EXIST_CHATROOM);
                     });
                     String receiver = chatRoom.getUser().getNickname();
                     String profileImage = chatRoom.getUser().getProfileImage();
                     // 채팅방의 마지막 채팅메시지 정보
-                    Optional<TextMessage> lastTextMessageOptional = textMessageRepository.findLatestMessageByRoomId(userChatRoom.getChatRoom().getChatRoomId());
-                    TextMessage lastTextMessage = lastTextMessageOptional.orElse(null);
-                    String latestMessage="";
+                    TextMessage lastTextMessage = textMessageRepository.findLatestMessageByRoomId(chatRoom.getChatRoom().getChatRoomId()).orElse(null);
+                    String latestMessage="No messages";
                     String latestDate="";
                     String latestTime="";
                     if (lastTextMessage != null) {
                         latestMessage = lastTextMessage.getMessage();
                         latestDate = lastTextMessage.getSendDate();
                         latestTime = lastTextMessage.getSendTime();
-                        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
+                        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
                         LocalTime localTime = LocalTime.parse(latestTime, formatter);
                         latestTime = formatTime(localTime);
-                    } else {
-                        throw new ApiException(ApiResponseStatus.BAD_REQUEST);
                     }
                     int unreadCount = 0;
 
@@ -135,7 +135,7 @@ public class ChatRoomService {
     // 채팅방 나가기
     public String exitChatRoom(String roomId, String email) {
         ChatRoom chatroom = chatRoomRepository.findChatRoomById(roomId).orElseThrow(() -> {
-            throw new ApiException(ApiResponseStatus.NONE_EXIST_USER);
+            throw new ApiException(ApiResponseStatus.NONE_EXIST_CHATROOM);
         });
         User user = userRepository.findByEmail(email).orElseThrow(() -> {
             throw new ApiException(ApiResponseStatus.NONE_EXIST_USER);

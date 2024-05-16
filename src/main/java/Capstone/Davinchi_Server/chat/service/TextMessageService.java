@@ -50,7 +50,7 @@ public class TextMessageService {
             throw new ApiException(ApiResponseStatus.NONE_EXIST_USER);
         });
         ChatRoom chatRoom = chatRoomRepository.findChatRoomById(roomId).orElseThrow(() -> {
-            throw new ApiException(ApiResponseStatus.NONE_EXIST_REVIEW);
+            throw new ApiException(ApiResponseStatus.NONE_EXIST_CHATROOM);
         });
 
         TextMessage chatMessage = TextMessage.builder()
