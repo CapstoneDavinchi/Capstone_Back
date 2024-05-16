@@ -1,4 +1,5 @@
 spring:
+
   datasource:
     url: ${DB_HOST}
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -14,5 +15,16 @@ spring:
       hibernate:
         format_sql: true
 
+  cloud:
+    gcp:
+      storage:
+        credentials:
+          location: ${STORAGE_KEYFILE}
+        project-id: ${PROJECT_ID}
+        bucket: davinchi-cs
+
+
+
 jwt:
   secret-key: ${JWT_SECRET_KEY}
+
