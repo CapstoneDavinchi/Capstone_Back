@@ -27,10 +27,9 @@ public class GalleryPostController {
     @Operation(summary = "예술작품 등록 API")
     @PostMapping(value = "/posts", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     @PreAuthorize("isAuthenticated()")
-    public ApiResponse<GalleryPostRes.AddGalleryPostRes> addGalleryPost(@RequestPart GalleryPostReq.AddGalleryPostReq addGalleryPostReq,
+    public ApiResponse<GalleryPostRes.AddGalleryPostRes> addGalleryPost(@RequestPart GalleryPostReq addGalleryPostReq,
                                                       @RequestPart(required = false) List<MultipartFile> images,
                                                       Principal principal){
-        System.out.println(principal.getName());
         try {
             return new ApiResponse<>(galleryPostCommandService.addGalleryPost(addGalleryPostReq, images, principal.getName()));
 
@@ -38,4 +37,5 @@ public class GalleryPostController {
             return new ApiResponse<>(exception.getStatus());
         }
     }
+
 }

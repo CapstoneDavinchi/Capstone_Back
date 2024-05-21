@@ -13,7 +13,7 @@ public class GalleryPostConverter {
 
     private  final StorageService storageService;
 
-    public static GalleryPost toGalleryPost(GalleryPostReq.AddGalleryPostReq addGalleryPostReq, User user){
+    public static GalleryPost toGalleryPost(GalleryPostReq addGalleryPostReq, User user){
         return GalleryPost.builder()
                 .user(user)
                 .title(addGalleryPostReq.getTitle())
