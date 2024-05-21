@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class GalleryImg {
+public class GalleryPostImg {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -26,7 +26,4 @@ public class GalleryImg {
     @JoinColumn(name = "gallerPost_id")
     private GalleryPost galleryPost;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "galleryFeedback_id")
-    private GalleryFeedback galleryFeedback;
 }

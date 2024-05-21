@@ -45,7 +45,8 @@ public class GalleryPost extends BaseTimeEntity {
     private List<GalleryFeedback> GalleryFeedbacks;
 
     @OneToMany(mappedBy = "galleryPost")
-    private List<GalleryImg> galleryImgs;
+    private List<GalleryPostImg> galleryPostImgs;
+
 
 
 
