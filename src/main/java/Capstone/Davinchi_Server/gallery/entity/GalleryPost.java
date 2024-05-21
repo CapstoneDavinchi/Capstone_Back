@@ -1,5 +1,6 @@
 package Capstone.Davinchi_Server.gallery.entity;
 
+import Capstone.Davinchi_Server.gallery.entity.enums.GalleryCategory;
 import Capstone.Davinchi_Server.global.entity.BaseTimeEntity;
 import Capstone.Davinchi_Server.user.entity.User;
 import jakarta.persistence.*;
@@ -31,7 +32,8 @@ public class GalleryPost extends BaseTimeEntity {
     private String content;
 
     @Column(nullable = false)
-    private String category;
+    @Enumerated(EnumType.STRING)
+    private GalleryCategory category;
 
     @OneToMany(mappedBy = "galleryPost")
     private List<GalleryComment> GalleryComments;
