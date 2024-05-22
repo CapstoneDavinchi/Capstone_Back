@@ -31,7 +31,7 @@ public class GalleryPostCommandService {
     private final GalleryPostRepository galleryPostRepository;
     private final GalleryPostImgRepository galleryPostImgRepository;
 
-    public GalleryPostRes.AddGalleryPostRes addGalleryPost(GalleryPostReq addGalleryPostReq, List<MultipartFile> images, String email){
+    public GalleryPostRes.AddGalleryPostRes addGalleryPost(GalleryPostReq.AddGalleryPostReq addGalleryPostReq, List<MultipartFile> images, String email){
 
         User currentUser = userRepository.findByEmail(email).orElseThrow(() -> {
             throw new ApiException(ApiResponseStatus.NONE_EXIST_USER);
@@ -53,5 +53,10 @@ public class GalleryPostCommandService {
 
         galleryPostRepository.save(galleryPost);
         return GalleryPostConverter.toAddGalleryPostRes(galleryPost);
+    }
+
+    public GalleryPostRes.UpdateGalleryPostRes updateGalleryPost(GalleryPostReq updateGalleryPostReq, List<MultipartFile> images, String email){
+
+
     }
 }

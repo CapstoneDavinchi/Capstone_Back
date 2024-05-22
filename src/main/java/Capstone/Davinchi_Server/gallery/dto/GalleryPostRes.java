@@ -14,4 +14,11 @@ public class GalleryPostRes {
         private Long id;
         private LocalDateTime createdDate;
     }
+
+    @Getter
+    @Builder
+    public static class UpdateGalleryPostRes{
+        private Long id;
+        private LocalDateTime updateDate;
+    }
 }

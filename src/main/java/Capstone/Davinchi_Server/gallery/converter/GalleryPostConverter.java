@@ -11,9 +11,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class GalleryPostConverter {
 
-    private  final StorageService storageService;
-
-    public static GalleryPost toGalleryPost(GalleryPostReq addGalleryPostReq, User user){
+    public static GalleryPost toGalleryPost(GalleryPostReq.AddGalleryPostReq addGalleryPostReq, User user){
         return GalleryPost.builder()
                 .user(user)
                 .title(addGalleryPostReq.getTitle())
@@ -26,6 +24,13 @@ public class GalleryPostConverter {
         return GalleryPostRes.AddGalleryPostRes.builder()
                 .id(galleryPost.getId())
                 .createdDate(galleryPost.getCreatedDate())
+                .build();
+    }
+
+    public static GalleryPostRes.UpdateGalleryPostRes toUpdateGalleryPostRes(GalleryPost galleryPost){
+        return GalleryPostRes.UpdateGalleryPostRes.builder()
+                .id(galleryPost.getId())
+                .updateDate(galleryPost.getCreatedDate())
                 .build();
     }
 
