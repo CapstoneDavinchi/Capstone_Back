@@ -44,5 +44,12 @@ public class MarketPost extends BaseTimeEntity {
 
     @OneToMany(mappedBy = "marketPost")
     private List<MarketImg> marketImgs;
+
+    public void updateMarket(String title, String content, String price, String category){
+        this.title=title;
+        this.content=content;
+        this.price=price;
+        this.category=category;
+    }
 }
 
