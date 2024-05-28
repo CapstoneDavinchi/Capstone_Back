@@ -19,7 +19,7 @@ spring:
     gcp:
       storage:
         credentials:
-          location: ${STORAGE_KEYFILE}
+          encoded-key: ${STORAGE_KEYFILE}
         project-id: ${PROJECT_ID}
         bucket: davinchi-cs
 
