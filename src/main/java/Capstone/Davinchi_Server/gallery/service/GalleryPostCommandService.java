@@ -30,8 +30,9 @@ public class GalleryPostCommandService {
     private final StorageService storageService;
     private final GalleryPostRepository galleryPostRepository;
     private final GalleryPostImgRepository galleryPostImgRepository;
+    private final GalleryPostQueryService galleryPostQueryService;
 
-    public GalleryPostRes.AddGalleryPostRes addGalleryPost(GalleryPostReq.AddGalleryPostReq addGalleryPostReq, List<MultipartFile> images, String email){
+    public GalleryPostRes.AddGalleryPostRes addGalleryPost(GalleryPostReq.AddGalleryPostReq addGalleryPostReq, List<MultipartFile> images, String email) {
 
         User currentUser = userRepository.findByEmail(email).orElseThrow(() -> {
             throw new ApiException(ApiResponseStatus.NONE_EXIST_USER);
@@ -39,7 +40,23 @@ public class GalleryPostCommandService {
 
         GalleryPost galleryPost = GalleryPostConverter.toGalleryPost(addGalleryPostReq, currentUser);
 
-        if(images != null){
+        //updateGalleryPostImgs(images, galleryPost);
+
+        galleryPostRepository.save(galleryPost);
+        return GalleryPostConverter.toAddGalleryPostRes(galleryPost);
+    }
+
+    public GalleryPostRes.UpdateGalleryPostRes updateGalleryPost(GalleryPostReq.UpdateGalleryPostReq updateGalleryPostReq) {
+
+        GalleryPost galleryPost = galleryPostQueryService.findGalleryPost(updateGalleryPostReq.getId());
+        galleryPost.update(updateGalleryPostReq.getTitle(), updateGalleryPostReq.getContent(), updateGalleryPostReq.getCategory());
+
+        return GalleryPostConverter.toUpdateGalleryPostRes(galleryPost);
+    }
+
+/* 이미지 관련 코드
+    private void updateGalleryPostImgs(List<MultipartFile> images, GalleryPost galleryPost) {
+        if (images != null) {
             List<GalleryPostImg> imgs = images.stream()
                     .map(image -> {
                         String imgUrl = storageService.upload(image);
@@ -49,14 +66,10 @@ public class GalleryPostCommandService {
 
             galleryPostImgRepository.saveAll(imgs);
         }
-
-
-        galleryPostRepository.save(galleryPost);
-        return GalleryPostConverter.toAddGalleryPostRes(galleryPost);
     }
 
-    public GalleryPostRes.UpdateGalleryPostRes updateGalleryPost(GalleryPostReq updateGalleryPostReq, List<MultipartFile> images, String email){
-
-
+    private void deleteGalleryPostImgs(List<Long> deleteImgsId){
+        List<GalleryPostImg> deleteImgs = galleryPostImgRepository.findAllById(deleteImgsId);
     }
+ */
 }

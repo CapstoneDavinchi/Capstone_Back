@@ -6,5 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface GalleryPostRepository extends JpaRepository<GalleryPost, String> {
+public interface GalleryPostRepository extends JpaRepository<GalleryPost, Long> {
 }

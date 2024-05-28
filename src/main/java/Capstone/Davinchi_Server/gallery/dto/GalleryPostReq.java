@@ -17,7 +17,7 @@ public class GalleryPostReq {
         private Long id;
         private String title;
         private String content;
-        private GalleryCategory galleryCategory;
+        private GalleryCategory category;
     }
 
 }

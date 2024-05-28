@@ -47,6 +47,12 @@ public class GalleryPost extends BaseTimeEntity {
     @OneToMany(mappedBy = "galleryPost")
     private List<GalleryPostImg> galleryPostImgs;
 
+    public void update(String title, String content, GalleryCategory category){
+        this.title = title;
+        this.content = content;
+        this.category = category;
+    }
+
 
 
 

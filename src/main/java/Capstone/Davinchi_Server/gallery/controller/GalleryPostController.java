@@ -38,11 +38,10 @@ public class GalleryPostController {
     @Operation(summary = "예술작품 게시글 수정 API")
     @PatchMapping(value = "/posts", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     @PreAuthorize("isAuthenticated()")
-    public ApiResponse<GalleryPostRes.UpdateGalleryPostRes> upadateGalleryPost(@RequestPart GalleryPostReq.UpdateGalleryPostReq updateGalleryPostReq,
-                                                                        @RequestPart(required = false) List<MultipartFile> images,
-                                                                        Principal principal){
+    public ApiResponse<GalleryPostRes.UpdateGalleryPostRes> updateGalleryPost(@RequestPart GalleryPostReq.UpdateGalleryPostReq updateGalleryPostReq,
+                                                                        @RequestPart(required = false) List<MultipartFile> images){
         try {
-            return null;
+            return new ApiResponse<>(galleryPostCommandService.updateGalleryPost(updateGalleryPostReq));
         } catch (ApiException exception) {
             return new ApiResponse<>(exception.getStatus());
         }
