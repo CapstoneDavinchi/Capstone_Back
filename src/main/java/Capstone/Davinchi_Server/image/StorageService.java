@@ -32,18 +32,22 @@ public class StorageService {
         String uuid = UUID.randomUUID().toString();
         String ext = multipartFile.getContentType();
         Storage storage = null;
+
+        try{
+            InputStream keyFile = ResourceUtils.getURL(keyFileName).openStream();
+
+            storage = StorageOptions.newBuilder()
+                    .setCredentials(GoogleCredentials.fromStream(keyFile))
+                    .build()
+                    .getService();
+        }catch (IOException e){
+            throw new ApiException(ApiResponseStatus.CREATE_STORAGE_FAIL);
+        }
         String imgUrl = "https://storage.googleapis.com/" + bucketName + "/" + uuid;
         try{
             if (multipartFile.isEmpty()) {
                 imgUrl = null;
             } else {
-                InputStream keyFile = ResourceUtils.getURL(keyFileName).openStream();
-
-                storage = StorageOptions.newBuilder()
-                        .setCredentials(GoogleCredentials.fromStream(keyFile))
-                        .build()
-                        .getService();
-
                 BlobInfo blobInfo = BlobInfo.newBuilder(bucketName, uuid)
                         .setContentType(ext).build();
 
