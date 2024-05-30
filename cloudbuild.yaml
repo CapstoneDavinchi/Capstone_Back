@@ -12,15 +12,6 @@ steps:
   - name: 'gcr.io/cloud-builders/docker'
     args: [ 'push', 'asia-northeast1-docker.pkg.dev/${PROJECT_ID}/davinchi-cicd-ar/davinchi-image:latest' ]
 
-  # 3. Cloud Run에 배포하기 전에 Secret Manager에서 시크릿 가져오기
-  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
-    entrypoint: 'bash'
-    args:
-      - '-c'
-      - |
-        gcloud secrets versions access latest --secret="davinchi-gcs-secret-key" > keyfile.json
-        export STORAGE_KEYFILE=$(pwd)/keyfile.json
-
   # 3. Cloud Run
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
     entrypoint: gcloud
@@ -32,7 +23,7 @@ steps:
       - 'asia-northeast1-docker.pkg.dev/${PROJECT_ID}/davinchi-cicd-ar/davinchi-image:latest'
       - '--region'
       - 'asia-northeast1'
-      - '--set-env-vars=STORAGE_KEYFILE=$STORAGE_KEYFILE'
 
 options:
   logging: CLOUD_LOGGING_ONLY
+
