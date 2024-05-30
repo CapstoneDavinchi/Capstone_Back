@@ -4,6 +4,7 @@ import Capstone.Davinchi_Server.gallery.dto.GalleryPostReq;
 import Capstone.Davinchi_Server.gallery.dto.GalleryPostRes;
 import Capstone.Davinchi_Server.gallery.entity.GalleryPost;
 import Capstone.Davinchi_Server.gallery.service.GalleryPostCommandService;
+import Capstone.Davinchi_Server.gallery.service.GalleryPostQueryService;
 import Capstone.Davinchi_Server.global.exception.ApiException;
 import Capstone.Davinchi_Server.global.exception.ApiResponse;
 import io.swagger.v3.oas.annotations.Operation;
@@ -21,6 +22,7 @@ import java.util.List;
 @RequestMapping("/gallery")
 public class GalleryPostController {
     private final GalleryPostCommandService galleryPostCommandService;
+private final GalleryPostQueryService galleryPostQueryService;
     @Operation(summary = "예술작품 등록 API")
     @PostMapping(value = "/posts", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     @PreAuthorize("isAuthenticated()")
@@ -42,6 +44,17 @@ public class GalleryPostController {
                                                                         @RequestPart(required = false) List<MultipartFile> images){
         try {
             return new ApiResponse<>(galleryPostCommandService.updateGalleryPost(updateGalleryPostReq));
+        } catch (ApiException exception) {
+            return new ApiResponse<>(exception.getStatus());
+        }
+    }
+
+    @Operation(summary = "예술작품 게시글 삭제 API")
+    @DeleteMapping("/posts/{galleryPostId}")
+    @PreAuthorize("isAuthenticated()")
+    public ApiResponse<GalleryPostRes.DeleteGalleryPostRes> deleteGalleryPost(@PathVariable(name = "galleryPostId") Long id){
+        try {
+            return new ApiResponse<>(galleryPostCommandService.deleteGalleryPost(id));
         } catch (ApiException exception) {
             return new ApiResponse<>(exception.getStatus());
         }

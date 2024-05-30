@@ -7,6 +7,8 @@ import Capstone.Davinchi_Server.image.StorageService;
 import Capstone.Davinchi_Server.user.entity.User;
 import lombok.RequiredArgsConstructor;
 
+import java.time.LocalDateTime;
+
 
 @RequiredArgsConstructor
 public class GalleryPostConverter {
@@ -31,6 +33,13 @@ public class GalleryPostConverter {
         return GalleryPostRes.UpdateGalleryPostRes.builder()
                 .id(galleryPost.getId())
                 .updateDate(galleryPost.getCreatedDate())
+                .build();
+    }
+
+    public static GalleryPostRes.DeleteGalleryPostRes toDeleteGalleryPostRes(Long id){
+        return GalleryPostRes.DeleteGalleryPostRes.builder()
+                .id(id)
+                .deleteDate(LocalDateTime.now())
                 .build();
     }
 
