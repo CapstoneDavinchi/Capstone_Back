@@ -54,6 +54,15 @@ public class GalleryPostCommandService {
         return GalleryPostConverter.toUpdateGalleryPostRes(galleryPost);
     }
 
+    public GalleryPostRes.DeleteGalleryPostRes deleteGalleryPost(Long id){
+        try{
+            galleryPostRepository.deleteById(id);
+            return GalleryPostConverter.toDeleteGalleryPostRes(id);
+        }catch (Exception e){
+            throw new ApiException(ApiResponseStatus.DELETE_GALLERY_POST_FAIL);
+        }
+    }
+
 /* 이미지 관련 코드
     private void updateGalleryPostImgs(List<MultipartFile> images, GalleryPost galleryPost) {
         if (images != null) {

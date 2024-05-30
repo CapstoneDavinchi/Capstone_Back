@@ -54,10 +54,9 @@ public enum ApiResponseStatus {
     CANNOT_UPDATE_NICKNAME(false, 2024, "동일한 닉네임으로 변경할 수 없습니다."),
 
     /**
-     * 3000 : Response 오류
+     * 3000 : Gallery 오류
      */
-    // Common
-    RESPONSE_ERROR(false, 3000, "값을 불러오는데 실패하였습니다."),
+    DELETE_GALLERY_POST_FAIL(false, 3000, "게시글 삭제에 실패했습니다."),
 
     /**
      * 4000 : Database, Server 오류

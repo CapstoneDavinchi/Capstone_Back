@@ -35,16 +35,16 @@ public class GalleryPost extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private GalleryCategory category;
 
-    @OneToMany(mappedBy = "galleryPost")
+    @OneToMany(mappedBy = "galleryPost", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<GalleryComment> GalleryComments;
 
-    @OneToMany(mappedBy = "galleryPost")
+    @OneToMany(mappedBy = "galleryPost", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<GalleryPostLike> GalleryPostLikes;
 
-    @OneToMany(mappedBy = "galleryPost")
+    @OneToMany(mappedBy = "galleryPost", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<GalleryFeedback> GalleryFeedbacks;
 
-    @OneToMany(mappedBy = "galleryPost")
+    @OneToMany(mappedBy = "galleryPost", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<GalleryPostImg> galleryPostImgs;
 
     public void update(String title, String content, GalleryCategory category){
