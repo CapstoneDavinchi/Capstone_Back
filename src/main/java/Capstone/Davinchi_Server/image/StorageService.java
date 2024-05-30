@@ -13,8 +13,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.ResourceUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Base64;
 import java.util.UUID;
 
 @RequiredArgsConstructor
@@ -22,8 +24,8 @@ import java.util.UUID;
 public class StorageService {
 
 
-    @Value("${spring.cloud.gcp.storage.credentials.location}")
-    private String keyFileName;
+    @Value("${spring.cloud.gcp.storage.credentials.encoded-key}")
+    private String encodedKeyFile;
 
     @Value("${spring.cloud.gcp.storage.bucket}")
     private String bucketName;
@@ -32,22 +34,19 @@ public class StorageService {
         String uuid = UUID.randomUUID().toString();
         String ext = multipartFile.getContentType();
         Storage storage = null;
-
-        try{
-            InputStream keyFile = ResourceUtils.getURL(keyFileName).openStream();
-
-            storage = StorageOptions.newBuilder()
-                    .setCredentials(GoogleCredentials.fromStream(keyFile))
-                    .build()
-                    .getService();
-        }catch (IOException e){
-            throw new ApiException(ApiResponseStatus.CREATE_STORAGE_FAIL);
-        }
         String imgUrl = "https://storage.googleapis.com/" + bucketName + "/" + uuid;
         try{
             if (multipartFile.isEmpty()) {
                 imgUrl = null;
             } else {
+                byte[] decodedKey = Base64.getDecoder().decode(encodedKeyFile);
+                ByteArrayInputStream keyFileStream = new ByteArrayInputStream(decodedKey);
+
+                storage = StorageOptions.newBuilder()
+                        .setCredentials(GoogleCredentials.fromStream(keyFileStream))
+                        .build()
+                        .getService();
+
                 BlobInfo blobInfo = BlobInfo.newBuilder(bucketName, uuid)
                         .setContentType(ext).build();
 
