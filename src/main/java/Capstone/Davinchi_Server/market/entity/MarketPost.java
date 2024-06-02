@@ -8,6 +8,7 @@ import Capstone.Davinchi_Server.user.entity.User;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -42,14 +43,20 @@ public class MarketPost extends BaseTimeEntity {
     @OneToMany(mappedBy = "marketPost")
     private List<MarketPostLike> marketPostLikes;
 
-    @OneToMany(mappedBy = "marketPost")
-    private List<MarketImg> marketImgs;
+    @OneToMany(mappedBy = "marketPost", cascade = {CascadeType.ALL}, orphanRemoval = true)
+    private List<MarketImg> marketImgs = new ArrayList<>();
+
 
     public void updateMarket(String title, String content, String price, String category){
         this.title=title;
         this.content=content;
         this.price=price;
         this.category=category;
+    }
+
+    public void addPhotoList(MarketImg marketImg){
+        marketImgs.add(marketImg);
+        marketImg.setMarket(this);
     }
 }
 
