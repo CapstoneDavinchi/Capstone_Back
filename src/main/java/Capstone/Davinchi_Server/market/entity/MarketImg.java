@@ -12,6 +12,7 @@ import lombok.*;
 @Getter
 @Setter
 public class MarketImg extends BaseTimeEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -26,6 +27,8 @@ public class MarketImg extends BaseTimeEntity {
     @JoinColumn(name = "market_post_id")
     private MarketPost marketPost;
 
-
+    public void setMarket(MarketPost marketPost){
+        this.marketPost = marketPost;
+    }
 }
 

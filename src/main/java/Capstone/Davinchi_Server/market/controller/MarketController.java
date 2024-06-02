@@ -13,7 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.security.Principal;
 import java.util.List;
 
-@Controller
+@RestController
 @RequiredArgsConstructor
 @RequestMapping("/market")
 public class MarketController {
@@ -51,5 +51,22 @@ public class MarketController {
         }
     }
 
+    @GetMapping
+    public ApiResponse<List<MarketRes.MarketListRes>> getMarketPosts(Principal principal) {
+        try{
+            return new ApiResponse<>(marketService.getMarketPosts(principal.getName()));
+        } catch (ApiException exception){
+            return new ApiResponse<>(exception.getStatus());
+        }
+    }
+
+    @GetMapping("/{marketId}")
+    public ApiResponse<MarketRes.MarketDetailRes> getMarketDetailPost(Principal principal, @PathVariable(name = "marketId") Long marketId) {
+        try{
+            return new ApiResponse<>(marketService.getMarketDetailPost(principal.getName(), marketId));
+        } catch (ApiException exception){
+            return new ApiResponse<>(exception.getStatus());
+        }
+    }
 
 }
