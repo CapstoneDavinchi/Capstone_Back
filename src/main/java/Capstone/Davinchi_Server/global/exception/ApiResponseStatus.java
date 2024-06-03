@@ -66,12 +66,10 @@ public enum ApiResponseStatus {
     SERVER_ERROR(false, 4001, "서버와의 연결에 실패하였습니다."),
 
     /**
-     *   5000 : Review 관련 오류
+     *   5000 : image 관련 오류
      */
-    NONE_EXIST_REVIEW(false, 5000, "요청하신 리뷰는 존재하지 않습니다."),
-    INVALID_REVIEW_ID(false, 5001, "유효하지 않은 입력입니다."),
-    EXCEEDED_CONTENT_LIMIT(false, 5003, "본문이 글자수 제한을 초과하였습니다."),
-    USER_WITHOUT_PERMISSION(false, 5007, "본인의 리뷰에 대해서만 수정 및 삭제가 가능합니다."),
+    CREATE_STORAGE_FAIL(false, 4001, "스토리지 객체 생성에 실패하였습니다."),
+    IMAGE_UPLOAD_FAIL(false, 4001, "이미지 업로드에 실패하였습니다."),
 
     /**
      *   6000 : 회원등록 관련 오류
@@ -89,7 +87,13 @@ public enum ApiResponseStatus {
     EXPIRED_USER_JWT(false,8000,"만료된 JWT입니다."),
     REISSUE_TOKEN(false, 8001, "토큰이 만료되었습니다. 다시 로그인해주세요."),
     FAILED_TO_UPDATE(false, 8002, "토큰을 만료시키는 작업에 실패하였습니다."),
-    FAILED_TO_REFRESH(false, 8003, "토큰 재발급에 실패하였습니다.");
+    FAILED_TO_REFRESH(false, 8003, "토큰 재발급에 실패하였습니다."),
+
+    /**
+     *   9000 : 채팅 관련 오류
+     */
+
+    NONE_EXIST_CHATROOM(false, 9000, "존재하지 않는 채팅룸입니다.");
 
 
     private final boolean isSuccess;

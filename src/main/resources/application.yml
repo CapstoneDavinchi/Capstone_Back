@@ -21,5 +21,15 @@ logging:
   level:
     org.springframework.security: DEBUG
 
+  cloud:
+    gcp:
+      storage:
+        credentials:
+          encoded-key: ${STORAGE_KEYFILE}
+        project-id: ${PROJECT_ID}
+        bucket: davinchi-cs
+
+
+
 jwt:
   secret-key: ${JWT_SECRET_KEY}
