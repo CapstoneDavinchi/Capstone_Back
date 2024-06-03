@@ -146,5 +146,13 @@ public class JwtTokenUtil {
                 .compact();
     }
 
+    public long getAccessTokenExpiryDuration() {
+        return accessTokenValidTime;
+    }
+
+    public long getRefreshTokenExpiryDuration() {
+        return refreshTokenValidTime;
+    }
+
 
 }
