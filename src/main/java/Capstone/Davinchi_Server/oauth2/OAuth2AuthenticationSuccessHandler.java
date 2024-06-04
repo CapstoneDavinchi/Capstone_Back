@@ -12,12 +12,12 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import java.io.IOException;
 import java.util.Optional;
 
 import static Capstone.Davinchi_Server.oauth2.HttpCookieOAuth2AuthorizationRequestRepository.REDIRECT_URI_PARAM_COOKIE_NAME;
-import static org.springframework.web.util.UriComponentsBuilder.fromUriString;
 
 @Component
 @RequiredArgsConstructor
@@ -29,9 +29,11 @@ public class OAuth2AuthenticationSuccessHandler implements AuthenticationSuccess
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException {
         String targetUrl = determineTargetUrl(request, response, authentication);
+
         clearAuthenticationAttributes(request, response);
         response.sendRedirect(targetUrl);
     }
+
     protected String determineTargetUrl(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
         Optional<String> redirectUri = CookieUtils.getCookie(request, REDIRECT_URI_PARAM_COOKIE_NAME)
                 .map(Cookie::getValue);
@@ -44,17 +46,35 @@ public class OAuth2AuthenticationSuccessHandler implements AuthenticationSuccess
                 existingToken -> existingToken.update(token.getRefreshToken()),
                 () -> refreshTokenRepository.save(new RefreshToken(email, token.getRefreshToken()))
         );
-        String targetUrl = redirectUri.orElse(getDefaultTargetUrl());
-        return fromUriString(targetUrl)
-                .queryParam("accessToken", token.getAccessToken())
-                .queryParam("refreshToken", token.getRefreshToken())
-                .build().toUriString();
+
+        // 쿠키에 토큰 저장
+        addTokenToCookies(response, token.getAccessToken(), token.getRefreshToken());
+
+        return redirectUri.orElse(getDefaultTargetUrl());
     }
+
+    private void addTokenToCookies(HttpServletResponse response, String accessToken, String refreshToken) {
+        Cookie accessTokenCookie = new Cookie("accessToken", accessToken);
+        accessTokenCookie.setHttpOnly(true);
+        accessTokenCookie.setSecure(true);
+        accessTokenCookie.setPath("/");
+        accessTokenCookie.setMaxAge((int) jwtTokenUtil.getAccessTokenExpiryDuration() / 1000);
+
+        Cookie refreshTokenCookie = new Cookie("refreshToken", refreshToken);
+        refreshTokenCookie.setHttpOnly(true);
+        refreshTokenCookie.setSecure(true);
+        refreshTokenCookie.setPath("/");
+        refreshTokenCookie.setMaxAge((int) jwtTokenUtil.getRefreshTokenExpiryDuration() / 1000);
+
+        response.addCookie(accessTokenCookie);
+        response.addCookie(refreshTokenCookie);
+    }
+
     protected void clearAuthenticationAttributes(HttpServletRequest request, HttpServletResponse response) {
         httpCookieOAuth2AuthorizationRequestRepository.removeAuthorizationRequestCookies(request, response);
     }
 
     private String getDefaultTargetUrl() {
-        return "http://localhost:3000";
+        return "http://localhost:8080";
     }
 }

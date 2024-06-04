@@ -1,0 +1,18 @@
+spring:
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: ${GOOGLE_CLIENT_ID}
+            client-secret: ${GOOGLE_CLIENT_SECRET}
+            redirect-uri: "{baseUrl}/login/oauth2/code/google"
+            scope:
+              - email
+              - profile
+#          apple:
+#            client-id: ${APPLE_CLIENT_ID}
+#            client-secret: ${APPLE_CLIENT_SECRET}
+#            scope:
+#              - email
+#              - name

@@ -1,5 +1,4 @@
 spring:
-
   datasource:
     url: ${DB_HOST}
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -15,6 +14,13 @@ spring:
       hibernate:
         format_sql: true
 
+  profiles:
+    include: oauth
+
+logging:
+  level:
+    org.springframework.security: DEBUG
+
   cloud:
     gcp:
       storage:
@@ -27,4 +33,3 @@ spring:
 
 jwt:
   secret-key: ${JWT_SECRET_KEY}
-
