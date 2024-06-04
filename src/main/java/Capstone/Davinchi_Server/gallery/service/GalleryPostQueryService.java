@@ -1,5 +1,7 @@
 package Capstone.Davinchi_Server.gallery.service;
 
+import Capstone.Davinchi_Server.gallery.dto.GalleryPostDetails;
+import Capstone.Davinchi_Server.gallery.dto.GalleryPostRes;
 import Capstone.Davinchi_Server.gallery.entity.GalleryPost;
 import Capstone.Davinchi_Server.gallery.repository.GalleryPostRepository;
 import Capstone.Davinchi_Server.global.exception.ApiException;
@@ -20,5 +22,9 @@ public class GalleryPostQueryService {
                 .orElseThrow(() -> {
                     throw new ApiException(ApiResponseStatus.NONE_EXIST_USER);
                 });
+    }
+
+    public GalleryPostDetails getGalleryPostDetails(Long id){
+        return galleryPostRepository.findPostDetailById(id);
     }
 }
