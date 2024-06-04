@@ -3,6 +3,7 @@ package Capstone.Davinchi_Server.gallery.converter;
 import Capstone.Davinchi_Server.gallery.dto.GalleryPostReq;
 import Capstone.Davinchi_Server.gallery.dto.GalleryPostRes;
 import Capstone.Davinchi_Server.gallery.entity.GalleryPost;
+import Capstone.Davinchi_Server.gallery.entity.GalleryPostLike;
 import Capstone.Davinchi_Server.image.StorageService;
 import Capstone.Davinchi_Server.user.entity.User;
 import lombok.RequiredArgsConstructor;
@@ -57,6 +58,20 @@ public class GalleryPostConverter {
 
     public static List<GalleryPostRes.GalleryPostListRes> toGalleryPostListRes(List<GalleryPost> galleryPosts){
         return galleryPosts.stream().map(GalleryPostConverter::toGalleryPostListResList).toList();
+    }
+
+    public static GalleryPostLike toGalleryPostLike(User user, GalleryPost galleryPost){
+        return GalleryPostLike.builder()
+                .user(user)
+                .galleryPost(galleryPost)
+                .build();
+    }
+
+    public static GalleryPostRes.AddGalleryPostLikeRes toGalleryPostLikeRes(GalleryPostLike galleryPostLike){
+        return GalleryPostRes.AddGalleryPostLikeRes.builder()
+                .id(galleryPostLike.getId())
+                .createdDate(galleryPostLike.getCreatedDate())
+                .build();
     }
 
 }

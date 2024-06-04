@@ -83,4 +83,17 @@ public class GalleryPostController {
         }
     }
 
+    @Operation(summary = "예술작품 게시글 좋아요 API")
+    @PostMapping("/posts/likes/{galleryPostId}")
+    @PreAuthorize("isAuthenticated()")
+    public ApiResponse<GalleryPostRes.AddGalleryPostLikeRes> addLike(@PathVariable(name = "galleryPostId") Long id, Principal principal){
+        try {
+            return new ApiResponse<>(galleryPostCommandService.addGalleryPostLike(principal.getName(), id));
+        } catch (ApiException exception) {
+            return new ApiResponse<>(exception.getStatus());
+        }
+    }
+
+
+
 }

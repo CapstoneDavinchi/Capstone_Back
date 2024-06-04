@@ -51,4 +51,11 @@ public class GalleryPostRes {
         private String content;
         private String profileImg;
     }
+
+    @Getter
+    @Builder
+    public static class AddGalleryPostLikeRes{
+        private Long id;
+        LocalDateTime createdDate;
+    }
 }

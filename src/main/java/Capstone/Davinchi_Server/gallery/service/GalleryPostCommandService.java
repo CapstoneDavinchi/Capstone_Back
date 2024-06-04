@@ -6,7 +6,9 @@ import Capstone.Davinchi_Server.gallery.dto.GalleryPostReq;
 import Capstone.Davinchi_Server.gallery.dto.GalleryPostRes;
 import Capstone.Davinchi_Server.gallery.entity.GalleryPostImg;
 import Capstone.Davinchi_Server.gallery.entity.GalleryPost;
+import Capstone.Davinchi_Server.gallery.entity.GalleryPostLike;
 import Capstone.Davinchi_Server.gallery.repository.GalleryPostImgRepository;
+import Capstone.Davinchi_Server.gallery.repository.GalleryPostLikeRepository;
 import Capstone.Davinchi_Server.gallery.repository.GalleryPostRepository;
 import Capstone.Davinchi_Server.global.exception.ApiException;
 import Capstone.Davinchi_Server.global.exception.ApiResponseStatus;
@@ -31,6 +33,7 @@ public class GalleryPostCommandService {
     private final GalleryPostRepository galleryPostRepository;
     private final GalleryPostImgRepository galleryPostImgRepository;
     private final GalleryPostQueryService galleryPostQueryService;
+    private final GalleryPostLikeRepository galleryPostLikeRepository;
 
     public GalleryPostRes.AddGalleryPostRes addGalleryPost(GalleryPostReq.AddGalleryPostReq addGalleryPostReq, List<MultipartFile> images, String email) {
 
@@ -61,6 +64,15 @@ public class GalleryPostCommandService {
         }catch (Exception e){
             throw new ApiException(ApiResponseStatus.DELETE_GALLERY_POST_FAIL);
         }
+    }
+
+    public GalleryPostRes.AddGalleryPostLikeRes addGalleryPostLike(String email, Long id){
+        User currentUser = userRepository.findByEmail(email).orElseThrow(
+                () -> new ApiException(ApiResponseStatus.NONE_EXIST_USER));
+
+
+        GalleryPostLike galleryPostLike = galleryPostLikeRepository.save(GalleryPostConverter.toGalleryPostLike(currentUser, galleryPostQueryService.findGalleryPost(id)));
+        return GalleryPostConverter.toGalleryPostLikeRes(galleryPostLike);
     }
 
 /* 이미지 관련 코드
