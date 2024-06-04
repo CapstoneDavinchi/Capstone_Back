@@ -9,6 +9,10 @@ import Capstone.Davinchi_Server.gallery.service.GalleryPostQueryService;
 import Capstone.Davinchi_Server.global.exception.ApiException;
 import Capstone.Davinchi_Server.global.exception.ApiResponse;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -20,6 +24,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
+@Tag(name = "갤러리 게시글 API")
 @RequestMapping("/gallery")
 public class GalleryPostController {
     private final GalleryPostCommandService galleryPostCommandService;
@@ -89,6 +94,17 @@ public class GalleryPostController {
     public ApiResponse<GalleryPostRes.AddGalleryPostLikeRes> addLike(@PathVariable(name = "galleryPostId") Long id, Principal principal){
         try {
             return new ApiResponse<>(galleryPostCommandService.addGalleryPostLike(principal.getName(), id));
+        } catch (ApiException exception) {
+            return new ApiResponse<>(exception.getStatus());
+        }
+    }
+
+    @Operation(summary = "예술작품 게시글 좋아요 취소 API")
+    @DeleteMapping("/posts/likes/{galleryPostId}")
+    @PreAuthorize("isAuthenticated()")
+    public ApiResponse<GalleryPostRes.DeleteGalleryPostLikeRes> deleteLike(@PathVariable(name = "galleryPostId") Long id, Principal principal){
+        try {
+            return new ApiResponse<>(galleryPostCommandService.deleteLike(principal.getName(),id));
         } catch (ApiException exception) {
             return new ApiResponse<>(exception.getStatus());
         }

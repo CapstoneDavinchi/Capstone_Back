@@ -66,13 +66,22 @@ public class GalleryPostCommandService {
         }
     }
 
-    public GalleryPostRes.AddGalleryPostLikeRes addGalleryPostLike(String email, Long id){
+    public GalleryPostRes.AddGalleryPostLikeRes addGalleryPostLike(String email, Long galleryPostId){
         User currentUser = userRepository.findByEmail(email).orElseThrow(
                 () -> new ApiException(ApiResponseStatus.NONE_EXIST_USER));
 
 
-        GalleryPostLike galleryPostLike = galleryPostLikeRepository.save(GalleryPostConverter.toGalleryPostLike(currentUser, galleryPostQueryService.findGalleryPost(id)));
+        GalleryPostLike galleryPostLike = galleryPostLikeRepository.save(GalleryPostConverter.toGalleryPostLike(currentUser, galleryPostQueryService.findGalleryPost(galleryPostId)));
         return GalleryPostConverter.toGalleryPostLikeRes(galleryPostLike);
+    }
+
+    public GalleryPostRes.DeleteGalleryPostLikeRes deleteLike(String email, Long galleryPostId){
+        User currentUser = userRepository.findByEmail(email).orElseThrow(
+                () -> new ApiException(ApiResponseStatus.NONE_EXIST_USER));
+        GalleryPost galleryPost = galleryPostQueryService.findGalleryPost(galleryPostId);
+
+        Long deleteLikeId = galleryPostLikeRepository.deleteByUserAndGalleryPost(currentUser, galleryPost);
+        return GalleryPostConverter.toDeleteGalleryPostLikeRes(deleteLikeId);
     }
 
 /* 이미지 관련 코드

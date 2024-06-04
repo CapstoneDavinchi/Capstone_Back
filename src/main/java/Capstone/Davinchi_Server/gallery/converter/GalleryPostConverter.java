@@ -42,7 +42,7 @@ public class GalleryPostConverter {
     public static GalleryPostRes.DeleteGalleryPostRes toDeleteGalleryPostRes(Long id){
         return GalleryPostRes.DeleteGalleryPostRes.builder()
                 .id(id)
-                .deleteDate(LocalDateTime.now())
+                .deletedDate(LocalDateTime.now())
                 .build();
     }
 
@@ -71,6 +71,13 @@ public class GalleryPostConverter {
         return GalleryPostRes.AddGalleryPostLikeRes.builder()
                 .id(galleryPostLike.getId())
                 .createdDate(galleryPostLike.getCreatedDate())
+                .build();
+    }
+
+    public static GalleryPostRes.DeleteGalleryPostLikeRes toDeleteGalleryPostLikeRes(Long id){
+        return GalleryPostRes.DeleteGalleryPostLikeRes.builder()
+                .id(id)
+                .deletedDate(LocalDateTime.now())
                 .build();
     }
 

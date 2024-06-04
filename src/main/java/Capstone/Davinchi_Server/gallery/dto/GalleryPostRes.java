@@ -40,7 +40,7 @@ public class GalleryPostRes {
     @Builder
     public static class DeleteGalleryPostRes{
         private Long id;
-        private LocalDateTime deleteDate;
+        private LocalDateTime deletedDate;
     }
     @Getter
     @Builder
@@ -58,4 +58,13 @@ public class GalleryPostRes {
         private Long id;
         LocalDateTime createdDate;
     }
+
+    @Getter
+    @Builder
+    public static class DeleteGalleryPostLikeRes{
+        private Long id;
+        LocalDateTime deletedDate;
+    }
+
+
 }
