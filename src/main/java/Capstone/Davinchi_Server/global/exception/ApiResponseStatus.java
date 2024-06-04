@@ -57,6 +57,7 @@ public enum ApiResponseStatus {
      * 3000 : Gallery 오류
      */
     DELETE_GALLERY_POST_FAIL(false, 3000, "게시글 삭제에 실패했습니다."),
+    GALLERY_POSTS_NOT_EXIST(false, 3001, "게시글이 존재하지 않습니다."),
 
     /**
      * 4000 : Database, Server 오류

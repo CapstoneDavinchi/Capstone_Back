@@ -7,6 +7,5 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface GalleryPostImgRepository extends JpaRepository<GalleryPostImg,String> {
-  //  List<GalleryPostImg> findAllById(List<Long> deleteImgsId);
+public interface GalleryPostImgRepository extends JpaRepository<GalleryPostImg,Long> {
 }

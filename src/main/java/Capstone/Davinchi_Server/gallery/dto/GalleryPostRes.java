@@ -42,4 +42,13 @@ public class GalleryPostRes {
         private Long id;
         private LocalDateTime deleteDate;
     }
+    @Getter
+    @Builder
+    public static class GalleryPostListRes{
+        private Long id;
+        private String nickname;
+        private String title;
+        private String content;
+        private String profileImg;
+    }
 }

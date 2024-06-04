@@ -8,6 +8,8 @@ import Capstone.Davinchi_Server.user.entity.User;
 import lombok.RequiredArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 
 @RequiredArgsConstructor
@@ -41,6 +43,20 @@ public class GalleryPostConverter {
                 .id(id)
                 .deleteDate(LocalDateTime.now())
                 .build();
+    }
+
+    public static GalleryPostRes.GalleryPostListRes toGalleryPostListResList(GalleryPost galleryPost){
+        return GalleryPostRes.GalleryPostListRes.builder()
+                .id(galleryPost.getId())
+                .nickname(galleryPost.getUser().getNickname())
+                .title(galleryPost.getTitle())
+                .content(galleryPost.getContent())
+                .profileImg(galleryPost.getUser().getProfileImage())
+                .build();
+    }
+
+    public static List<GalleryPostRes.GalleryPostListRes> toGalleryPostListRes(List<GalleryPost> galleryPosts){
+        return galleryPosts.stream().map(GalleryPostConverter::toGalleryPostListResList).toList();
     }
 
 }

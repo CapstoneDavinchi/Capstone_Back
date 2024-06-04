@@ -72,4 +72,15 @@ public class GalleryPostController {
         }
     }
 
+    @Operation(summary = "예술작품 게시글 목록 조회 API")
+    @GetMapping("/posts")
+    @PreAuthorize("isAuthenticated()")
+    public ApiResponse<List<GalleryPostRes.GalleryPostListRes>> getGalleryPostList(){
+        try {
+            return new ApiResponse<>(galleryPostQueryService.getGalleryPostList());
+        } catch (ApiException exception) {
+            return new ApiResponse<>(exception.getStatus());
+        }
+    }
+
 }
