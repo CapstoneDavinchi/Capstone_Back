@@ -4,13 +4,11 @@ import Capstone.Davinchi_Server.gallery.dto.GalleryPostReq;
 import Capstone.Davinchi_Server.gallery.dto.GalleryPostRes;
 import Capstone.Davinchi_Server.gallery.entity.GalleryPost;
 import Capstone.Davinchi_Server.gallery.entity.GalleryPostLike;
-import Capstone.Davinchi_Server.image.StorageService;
 import Capstone.Davinchi_Server.user.entity.User;
 import lombok.RequiredArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
 
 
 @RequiredArgsConstructor
@@ -34,21 +32,21 @@ public class GalleryPostConverter {
 
     public static GalleryPostRes.UpdateGalleryPostRes toUpdateGalleryPostRes(GalleryPost galleryPost){
         return GalleryPostRes.UpdateGalleryPostRes.builder()
-                .id(galleryPost.getId())
+                .galleryPostId(galleryPost.getId())
                 .updateDate(galleryPost.getCreatedDate())
                 .build();
     }
 
     public static GalleryPostRes.DeleteGalleryPostRes toDeleteGalleryPostRes(Long id){
         return GalleryPostRes.DeleteGalleryPostRes.builder()
-                .id(id)
+                .galleryPostId(id)
                 .deletedDate(LocalDateTime.now())
                 .build();
     }
 
     public static GalleryPostRes.GalleryPostListRes toGalleryPostListResList(GalleryPost galleryPost){
         return GalleryPostRes.GalleryPostListRes.builder()
-                .id(galleryPost.getId())
+                .galleryPostId(galleryPost.getId())
                 .nickname(galleryPost.getUser().getNickname())
                 .title(galleryPost.getTitle())
                 .content(galleryPost.getContent())
@@ -69,14 +67,14 @@ public class GalleryPostConverter {
 
     public static GalleryPostRes.AddGalleryPostLikeRes toGalleryPostLikeRes(GalleryPostLike galleryPostLike){
         return GalleryPostRes.AddGalleryPostLikeRes.builder()
-                .id(galleryPostLike.getId())
+                .galleryPostLikeId(galleryPostLike.getId())
                 .createdDate(galleryPostLike.getCreatedDate())
                 .build();
     }
 
     public static GalleryPostRes.DeleteGalleryPostLikeRes toDeleteGalleryPostLikeRes(Long id){
         return GalleryPostRes.DeleteGalleryPostLikeRes.builder()
-                .id(id)
+                .galleryPostLikeId(id)
                 .deletedDate(LocalDateTime.now())
                 .build();
     }
