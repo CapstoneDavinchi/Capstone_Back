@@ -17,10 +17,6 @@ spring:
   profiles:
     include: oauth
 
-logging:
-  level:
-    org.springframework.security: DEBUG
-
   cloud:
     gcp:
       storage:
@@ -29,6 +25,9 @@ logging:
         project-id: ${PROJECT_ID}
         bucket: davinchi-cs
 
+logging:
+  level:
+    org.springframework.security: DEBUG
 
 
 jwt:
