@@ -68,4 +68,14 @@ public class MarketController {
         }
     }
 
+    @PostMapping("/like/{marketId}")
+    public ApiResponse<String> likeMarket(Principal principal, @PathVariable(name="marketId") Long marketId){
+        try{
+            return new ApiResponse<>(marketService.likeMarket(principal.getName(), marketId));
+        } catch (ApiException exception){
+            return new ApiResponse<>(exception.getStatus());
+        }
+    }
+
+
 }
