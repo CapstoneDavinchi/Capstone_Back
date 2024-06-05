@@ -1,8 +1,5 @@
 package Capstone.Davinchi_Server.market.entity;
 
-import Capstone.Davinchi_Server.gallery.entity.GalleryFeedback;
-import Capstone.Davinchi_Server.gallery.entity.GalleryImg;
-import Capstone.Davinchi_Server.gallery.entity.GalleryPostLike;
 import Capstone.Davinchi_Server.global.entity.BaseTimeEntity;
 import Capstone.Davinchi_Server.user.entity.User;
 import jakarta.persistence.*;
