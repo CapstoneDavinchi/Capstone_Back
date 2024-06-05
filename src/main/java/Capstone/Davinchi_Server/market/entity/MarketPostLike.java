@@ -5,7 +5,6 @@ import Capstone.Davinchi_Server.user.entity.User;
 import jakarta.persistence.*;
 import lombok.*;
 
-
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor

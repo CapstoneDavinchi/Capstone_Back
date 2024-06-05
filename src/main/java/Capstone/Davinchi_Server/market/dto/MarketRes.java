@@ -1,6 +1,5 @@
 package Capstone.Davinchi_Server.market.dto;
 
-import Capstone.Davinchi_Server.chat.entity.TextMessage;
 import lombok.*;
 
 import java.util.List;

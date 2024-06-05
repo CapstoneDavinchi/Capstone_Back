@@ -4,7 +4,6 @@ import Capstone.Davinchi_Server.global.entity.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
-
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor

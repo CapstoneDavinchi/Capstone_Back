@@ -6,7 +6,6 @@ import Capstone.Davinchi_Server.market.dto.MarketReq;
 import Capstone.Davinchi_Server.market.dto.MarketRes;
 import Capstone.Davinchi_Server.market.service.MarketService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 

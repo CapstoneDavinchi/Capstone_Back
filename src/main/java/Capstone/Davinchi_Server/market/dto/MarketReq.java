@@ -1,7 +1,6 @@
 package Capstone.Davinchi_Server.market.dto;
 
 import lombok.*;
-
 public class MarketReq {
 
     @Builder
