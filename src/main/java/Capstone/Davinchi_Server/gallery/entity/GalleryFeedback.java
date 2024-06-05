@@ -30,7 +30,7 @@ public class GalleryFeedback extends BaseTimeEntity {
     private GalleryPost galleryPost;
 
     @OneToMany(mappedBy = "galleryFeedback")
-    private List<GalleryImg> galleryImgs;
+    private List<GalleryFeedbackImg> galleryFeedbackImgs;
 
     @Column(nullable = false)
     private String body;

@@ -15,37 +15,51 @@ public class OAuthAttributes {
     private String nameAttributesKey;
     private String name;
     private String email;
-    private String gender;
     private String profileImageUrl;
+    private String registrationId;
 
     @Builder
     public OAuthAttributes(Map<String, Object> attributes, String nameAttributesKey,
-                           String name, String email, String gender, String profileImageUrl) {
+                           String name, String email, String profileImageUrl, String registrationId) {
         this.attributes = attributes;
         this.nameAttributesKey = nameAttributesKey;
         this.name = name;
         this.email = email;
-        this.gender = gender;
         this.profileImageUrl = profileImageUrl;
+        this.registrationId = registrationId;
     }
 
     //OAuthAttributes 객체 생성
     public static OAuthAttributes of(String registrationId, String userNameAttributeName, Map<String, Object> attributes) {
 
-        if ("google".equals(registrationId)) {
-            return ofGoogle(userNameAttributeName, attributes);
+        if ("google".equals(registrationId)) { //구글 로그인
+            return ofGoogle(userNameAttributeName, attributes, registrationId);
+        } else if ("apple".equals(registrationId)) { //애플 로그인
+            return ofApple(userNameAttributeName, attributes, registrationId);
         }
 
         return null;
     }
 
-    private static OAuthAttributes ofGoogle(String userNameAttributeName, Map<String, Object> attributes) {
+    private static OAuthAttributes ofGoogle(String userNameAttributeName, Map<String, Object> attributes, String registrationId) {
         return OAuthAttributes.builder()
                 .name(String.valueOf(attributes.get("name")))
                 .email(String.valueOf(attributes.get("email")))
                 .profileImageUrl(String.valueOf(attributes.get("picture")))
                 .attributes(attributes)
-                .nameAttributesKey(userNameAttributeName) // userNameAttributeName 사용
+                .registrationId(registrationId)
+                .nameAttributesKey(userNameAttributeName)
+                .build();
+    }
+
+    private static OAuthAttributes ofApple(String userNameAttributeName, Map<String, Object> attributes, String registrationId) {
+        return OAuthAttributes.builder()
+                .name(String.valueOf(attributes.get("name")))
+                .email(String.valueOf(attributes.get("email")))
+                .profileImageUrl(String.valueOf(attributes.get("picture")))
+                .attributes(attributes)
+                .registrationId(registrationId)
+                .nameAttributesKey(userNameAttributeName)
                 .build();
     }
 
@@ -54,8 +68,8 @@ public class OAuthAttributes {
                 .nickname(name)
                 .email(email)
                 .profileImage(profileImageUrl)
+                .registrationId(registrationId)
                 .role("ROLE_USER")
-                .registrationId("google")
                 .build();
     }
 }

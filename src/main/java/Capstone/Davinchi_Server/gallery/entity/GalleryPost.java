@@ -1,5 +1,6 @@
 package Capstone.Davinchi_Server.gallery.entity;
 
+import Capstone.Davinchi_Server.gallery.entity.enums.GalleryCategory;
 import Capstone.Davinchi_Server.global.entity.BaseTimeEntity;
 import Capstone.Davinchi_Server.user.entity.User;
 import jakarta.persistence.*;
@@ -31,19 +32,27 @@ public class GalleryPost extends BaseTimeEntity {
     private String content;
 
     @Column(nullable = false)
-    private String category;
+    @Enumerated(EnumType.STRING)
+    private GalleryCategory category;
 
-    @OneToMany(mappedBy = "galleryPost")
+    @OneToMany(mappedBy = "galleryPost", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<GalleryComment> GalleryComments;
 
-    @OneToMany(mappedBy = "galleryPost")
+    @OneToMany(mappedBy = "galleryPost", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<GalleryPostLike> GalleryPostLikes;
 
-    @OneToMany(mappedBy = "galleryPost")
+    @OneToMany(mappedBy = "galleryPost", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<GalleryFeedback> GalleryFeedbacks;
 
-    @OneToMany(mappedBy = "galleryPost")
-    private List<GalleryImg> galleryImgs;
+    @OneToMany(mappedBy = "galleryPost", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<GalleryPostImg> galleryPostImgs;
+
+    public void update(String title, String content, GalleryCategory category){
+        this.title = title;
+        this.content = content;
+        this.category = category;
+    }
+
 
 
 

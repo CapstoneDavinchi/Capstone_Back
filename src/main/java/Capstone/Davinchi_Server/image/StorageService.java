@@ -34,7 +34,8 @@ public class StorageService {
         String uuid = UUID.randomUUID().toString();
         String ext = multipartFile.getContentType();
         Storage storage = null;
-        String imgUrl = "https://storage.googleapis.com/" + bucketName + "/" + uuid;
+        String originalFilename = multipartFile.getOriginalFilename();
+        String imgUrl = "https://storage.googleapis.com/" + bucketName + "/" + uuid + "/" + originalFilename;
         try{
             if (multipartFile.isEmpty()) {
                 imgUrl = null;
@@ -47,7 +48,7 @@ public class StorageService {
                         .build()
                         .getService();
 
-                BlobInfo blobInfo = BlobInfo.newBuilder(bucketName, uuid)
+                BlobInfo blobInfo = BlobInfo.newBuilder(bucketName, uuid + "/" + originalFilename)
                         .setContentType(ext).build();
 
                 Blob blob = storage.create(blobInfo, multipartFile.getInputStream());
@@ -58,4 +59,24 @@ public class StorageService {
 
         return imgUrl;
     }
+
+    public String delete(String imgUrl) {
+        Storage storage = null;
+        try {
+            byte[] decodedKey = Base64.getDecoder().decode(encodedKeyFile);
+            ByteArrayInputStream keyFileStream = new ByteArrayInputStream(decodedKey);
+
+            storage = StorageOptions.newBuilder()
+                    .setCredentials(GoogleCredentials.fromStream(keyFileStream))
+                    .build()
+                    .getService();
+
+            storage.delete(bucketName, imgUrl);
+        } catch (IOException e) {
+            throw new ApiException(ApiResponseStatus.IMAGE_UPLOAD_FAIL);
+        }
+        return imgUrl;
+
+    }
+
 }
