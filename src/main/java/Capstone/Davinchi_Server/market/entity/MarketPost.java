@@ -32,12 +32,13 @@ public class MarketPost extends BaseTimeEntity {
     @Column(nullable = false)
     private String price;
 
+    @Column
+    private Long likeCnt;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
 
-    @OneToMany(mappedBy = "marketPost")
-    private List<MarketPostLike> marketPostLikes;
 
     @OneToMany(mappedBy = "marketPost", cascade = {CascadeType.ALL}, orphanRemoval = true)
     private List<MarketImg> marketImgs = new ArrayList<>();
