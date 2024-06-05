@@ -81,7 +81,6 @@ public enum ApiResponseStatus {
     NICKNAME_CANNOT_BE_NULL(false, 6006, "닉네임을 입력해주세요"),
     EMAIL_CANNOT_BE_NULL(false, 6009, "이메일을 입력해주세요"),
 
-
     /**
      *   7000 : 마켓 관련 오류
      */
