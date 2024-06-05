@@ -80,6 +80,7 @@ public enum ApiResponseStatus {
     ALREADY_REGISTERED_USER(false, 6005, "이미 가입된 유저입니다."),
     NICKNAME_CANNOT_BE_NULL(false, 6006, "닉네임을 입력해주세요"),
     EMAIL_CANNOT_BE_NULL(false, 6009, "이메일을 입력해주세요"),
+
     /**
      *   7000 : 마켓 관련 오류
      */
