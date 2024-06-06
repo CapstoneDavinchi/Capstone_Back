@@ -1,11 +1,14 @@
 package Capstone.Davinchi_Server.market.service;
 
 import Capstone.Davinchi_Server.global.exception.ApiException;
+import Capstone.Davinchi_Server.global.exception.ApiResponse;
 import Capstone.Davinchi_Server.global.exception.ApiResponseStatus;
 import Capstone.Davinchi_Server.image.StorageService;
 import Capstone.Davinchi_Server.market.dto.MarketReq;
 import Capstone.Davinchi_Server.market.dto.MarketRes;
 import Capstone.Davinchi_Server.market.entity.MarketPost;
+import Capstone.Davinchi_Server.market.entity.MarketPostLike;
+import Capstone.Davinchi_Server.market.repository.MarketLikeRepository;
 import Capstone.Davinchi_Server.market.repository.MarketRepository;
 import Capstone.Davinchi_Server.user.entity.User;
 import Capstone.Davinchi_Server.user.repository.UserRepository;
@@ -21,6 +24,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 
@@ -33,6 +37,7 @@ public class MarketService {
     private final UserRepository userRepository;
     private final StorageService storageService;
     private final MarketPhotoService marketPhotoService;
+    private final MarketLikeRepository marketLikeRepository;
     public static final int SEC = 60;
     public static final int MIN = 60;
     public static final int HOUR = 24;
@@ -50,6 +55,7 @@ public class MarketService {
                     .category(postMarketReq.getCategory())
                     .content(postMarketReq.getContent())
                     .price(postMarketReq.getPrice())
+                    .likeCnt(0L)
                     .user(user)
                     .marketImgs(new ArrayList<>())
                     .build();
@@ -185,7 +191,7 @@ public class MarketService {
                     .price(formatPrice(Integer.valueOf(market.getPrice())))
                     .marketImgs(marketImgs)
                     .content(market.getContent())
-                    .like(market.getMarketPostLikes().toString())
+                    .like(market.getLikeCnt().toString())
                     .createdTime(convertLocalDateTimeToTime(market.getCreatedDate()))
                     .createdDate(convertLocalDateTimeToLocalDate(market.getCreatedDate()))
                     .build();
@@ -194,6 +200,101 @@ public class MarketService {
         } catch (Exception exception) {
             throw new ApiException(ApiResponseStatus.NOT_FOUND);
         }
+    }
+
+    public String likeMarket(String email, Long marketId) {
+        // 만약 email&marketId에 해당하는 marketpostlike이 있으면 좋아요 취소, 없으면 marketpostlike 엔티티 추가 생성
+        User user = userRepository.findByEmail(email).orElseThrow(() -> {
+            throw new ApiException(ApiResponseStatus.NONE_EXIST_USER);
+        });
+        MarketPost market = marketRepository.findById(marketId).orElseThrow(() -> {
+            throw new ApiException(ApiResponseStatus.NONE_EXIST_MARKET);
+        });
+
+        String resultMessage;
+        // 좋아요 확인 및 처리
+        Optional<MarketPostLike> optionalMarketPostLike = marketLikeRepository.findByUserUserIdAndMarketPostMarketId(user.getUserId(), marketId);
+        if (optionalMarketPostLike.isPresent()) {
+            // marketpostlike 있을 때 (좋아요 눌렀을 때) 좋아요 취소
+            marketLikeRepository.deleteById(optionalMarketPostLike.get().getMarketLikeId());
+            marketRepository.decrementLikeCount(marketId);
+            resultMessage = "marketId:" + market.getMarketId() + "의 좋아요 취소가 완료되었습니다.";
+        } else {
+            // 좋아요 저장
+            MarketPostLike newMarketPostLike = MarketPostLike.builder()
+                    .marketPost(market)
+                    .user(user)
+                    .build();
+            marketLikeRepository.save(newMarketPostLike);
+            marketRepository.incrementLikeCount(marketId);
+            resultMessage = "marketId:" + market.getMarketId() + "에 좋아요가 완료되었습니다.";
+        }
+
+        return resultMessage;
+    }
+
+    public List<MarketRes.MarketListRes> searchMarket(String email, String keyword){
+        User user = userRepository.findByEmail(email).orElseThrow(() -> {
+            throw new ApiException(ApiResponseStatus.NONE_EXIST_USER);
+        });
+        List<MarketPost> marketPosts = marketRepository.findAllByTitleOrContentContaining(keyword);
+        if(marketPosts.isEmpty()){
+            throw new ApiException(ApiResponseStatus.NONE_EXIST_MARKET);
+        }
+        List<MarketRes.MarketListRes> getMarketRes = marketPosts.stream()
+                .map(market -> {
+                    // 대표 이미지를 설정 (첫 번째 이미지 사용)
+                    MarketRes.GetGDSRes marketImg = market.getMarketImgs().isEmpty() ? null :
+                            new MarketRes.GetGDSRes(
+                                    market.getMarketImgs().get(0).getImageUrl(),
+                                    market.getMarketImgs().get(0).getOriginalFilename()
+                            );
+
+                    return MarketRes.MarketListRes.builder()
+                            .title(market.getTitle())
+                            .writer(market.getUser().getNickname())
+                            .writerImgUrl(market.getUser().getProfileImage())
+                            .price(formatPrice(Integer.valueOf(market.getPrice())))
+                            .marketImg(marketImg)
+                            .content(market.getContent())
+                            .createdTime(convertLocalDateTimeToTime(market.getCreatedDate()))
+                            .build();
+                })
+                .collect(Collectors.toList());
+        return getMarketRes;
+    }
+
+    public List<MarketRes.MarketListRes> myMarket(String email){
+        User user = userRepository.findByEmail(email).orElseThrow(() -> {
+            throw new ApiException(ApiResponseStatus.NONE_EXIST_USER);
+        });
+        List<MarketPostLike> marketPostLikes = marketLikeRepository.findAllByUserUserIdOrderByMarketLikeIdDesc(user.getUserId());
+        List<MarketPost> marketPosts = marketPostLikes.stream()
+                .map(MarketPostLike::getMarketPost)
+                .collect(Collectors.toList());
+
+
+        List<MarketRes.MarketListRes> getMarketRes = marketPosts.stream()
+                .map(market -> {
+                    // 대표 이미지를 설정 (첫 번째 이미지 사용)
+                    MarketRes.GetGDSRes marketImg = market.getMarketImgs().isEmpty() ? null :
+                            new MarketRes.GetGDSRes(
+                                    market.getMarketImgs().get(0).getImageUrl(),
+                                    market.getMarketImgs().get(0).getOriginalFilename()
+                            );
+
+                    return MarketRes.MarketListRes.builder()
+                            .title(market.getTitle())
+                            .writer(market.getUser().getNickname())
+                            .writerImgUrl(market.getUser().getProfileImage())
+                            .price(formatPrice(Integer.valueOf(market.getPrice())))
+                            .marketImg(marketImg)
+                            .content(market.getContent())
+                            .createdTime(convertLocalDateTimeToTime(market.getCreatedDate()))
+                            .build();
+                })
+                .collect(Collectors.toList());
+        return getMarketRes;
     }
 
     public static String convertLocalDateTimeToLocalDate(LocalDateTime localDateTime) {
