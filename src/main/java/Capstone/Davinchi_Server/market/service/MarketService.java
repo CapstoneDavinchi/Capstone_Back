@@ -1,6 +1,7 @@
 package Capstone.Davinchi_Server.market.service;
 
 import Capstone.Davinchi_Server.global.exception.ApiException;
+import Capstone.Davinchi_Server.global.exception.ApiResponse;
 import Capstone.Davinchi_Server.global.exception.ApiResponseStatus;
 import Capstone.Davinchi_Server.image.StorageService;
 import Capstone.Davinchi_Server.market.dto.MarketReq;
@@ -240,6 +241,39 @@ public class MarketService {
         if(marketPosts.isEmpty()){
             throw new ApiException(ApiResponseStatus.NONE_EXIST_MARKET);
         }
+        List<MarketRes.MarketListRes> getMarketRes = marketPosts.stream()
+                .map(market -> {
+                    // 대표 이미지를 설정 (첫 번째 이미지 사용)
+                    MarketRes.GetGDSRes marketImg = market.getMarketImgs().isEmpty() ? null :
+                            new MarketRes.GetGDSRes(
+                                    market.getMarketImgs().get(0).getImageUrl(),
+                                    market.getMarketImgs().get(0).getOriginalFilename()
+                            );
+
+                    return MarketRes.MarketListRes.builder()
+                            .title(market.getTitle())
+                            .writer(market.getUser().getNickname())
+                            .writerImgUrl(market.getUser().getProfileImage())
+                            .price(formatPrice(Integer.valueOf(market.getPrice())))
+                            .marketImg(marketImg)
+                            .content(market.getContent())
+                            .createdTime(convertLocalDateTimeToTime(market.getCreatedDate()))
+                            .build();
+                })
+                .collect(Collectors.toList());
+        return getMarketRes;
+    }
+
+    public List<MarketRes.MarketListRes> myMarket(String email){
+        User user = userRepository.findByEmail(email).orElseThrow(() -> {
+            throw new ApiException(ApiResponseStatus.NONE_EXIST_USER);
+        });
+        List<MarketPostLike> marketPostLikes = marketLikeRepository.findAllByUserUserIdOrderByMarketLikeIdDesc(user.getUserId());
+        List<MarketPost> marketPosts = marketPostLikes.stream()
+                .map(MarketPostLike::getMarketPost)
+                .collect(Collectors.toList());
+
+
         List<MarketRes.MarketListRes> getMarketRes = marketPosts.stream()
                 .map(market -> {
                     // 대표 이미지를 설정 (첫 번째 이미지 사용)

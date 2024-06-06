@@ -86,5 +86,14 @@ public class MarketController {
         }
     }
 
+    @GetMapping("/my")
+    public ApiResponse<List<MarketRes.MarketListRes>> myMarket(Principal principal){
+        try{
+            return new ApiResponse<>(marketService.myMarket(principal.getName()));
+        } catch (ApiException exception){
+            return new ApiResponse<>(exception.getStatus());
+        }
+    }
+
 
 }
