@@ -77,5 +77,14 @@ public class MarketController {
         }
     }
 
+    @GetMapping("/search")
+    public ApiResponse<List<MarketRes.MarketListRes>> searchMarket(Principal principal, @RequestParam("keyword") String keyword){
+        try{
+            return new ApiResponse<>(marketService.searchMarket(principal.getName(), keyword));
+        } catch (ApiException exception){
+            return new ApiResponse<>(exception.getStatus());
+        }
+    }
+
 
 }

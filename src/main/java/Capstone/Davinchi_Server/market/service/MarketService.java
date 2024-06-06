@@ -232,7 +232,36 @@ public class MarketService {
         return resultMessage;
     }
 
+    public List<MarketRes.MarketListRes> searchMarket(String email, String keyword){
+        User user = userRepository.findByEmail(email).orElseThrow(() -> {
+            throw new ApiException(ApiResponseStatus.NONE_EXIST_USER);
+        });
+        List<MarketPost> marketPosts = marketRepository.findAllByTitleOrContentContaining(keyword);
+        if(marketPosts.isEmpty()){
+            throw new ApiException(ApiResponseStatus.NONE_EXIST_MARKET);
+        }
+        List<MarketRes.MarketListRes> getMarketRes = marketPosts.stream()
+                .map(market -> {
+                    // 대표 이미지를 설정 (첫 번째 이미지 사용)
+                    MarketRes.GetGDSRes marketImg = market.getMarketImgs().isEmpty() ? null :
+                            new MarketRes.GetGDSRes(
+                                    market.getMarketImgs().get(0).getImageUrl(),
+                                    market.getMarketImgs().get(0).getOriginalFilename()
+                            );
 
+                    return MarketRes.MarketListRes.builder()
+                            .title(market.getTitle())
+                            .writer(market.getUser().getNickname())
+                            .writerImgUrl(market.getUser().getProfileImage())
+                            .price(formatPrice(Integer.valueOf(market.getPrice())))
+                            .marketImg(marketImg)
+                            .content(market.getContent())
+                            .createdTime(convertLocalDateTimeToTime(market.getCreatedDate()))
+                            .build();
+                })
+                .collect(Collectors.toList());
+        return getMarketRes;
+    }
 
     public static String convertLocalDateTimeToLocalDate(LocalDateTime localDateTime) {
         return localDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
