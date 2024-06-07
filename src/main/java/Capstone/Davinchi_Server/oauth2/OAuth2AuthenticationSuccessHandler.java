@@ -75,6 +75,6 @@ public class OAuth2AuthenticationSuccessHandler implements AuthenticationSuccess
     }
 
     private String getDefaultTargetUrl() {
-        return "http://localhost:8080";
+        return "https://davinchi-cr-ljqllr5pdq-an.a.run.app";
     }
 }
