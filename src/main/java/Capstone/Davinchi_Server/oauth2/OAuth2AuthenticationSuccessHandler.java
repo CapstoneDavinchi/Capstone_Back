@@ -75,6 +75,6 @@ public class OAuth2AuthenticationSuccessHandler implements AuthenticationSuccess
     }
 
     private String getDefaultTargetUrl() {
-        return "https://davinchi-cr-ljqllr5pdq-an.a.run.app";
+        return "capstone-front://callback";
     }
 }
